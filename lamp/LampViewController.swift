@@ -9,25 +9,36 @@ import UIKit
 
 class LampViewController: UIViewController {
     
-    @IBOutlet weak var lamp: UIButton!
+    
+    private var customView: LampView{
+        return view as! LampView
+    }
+    
+    override func loadView() {
+        view = LampView()
+    }
+    
     var lampState: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        lamp.tintColor = .yellow
         lampState.toggle()
+        customView.backgroundColor = .white
+        customView.lampButton.addAction(UIAction(handler: switchLamp(_:)), for: .touchUpInside)
     }
 
-    @IBAction func switchLamp(_ sender: UIButton) {
+    func switchLamp(_ sender: UIAction) {
         lampState = !lampState
         if lampState {
-            lamp.tintColor = .yellow
-            lamp.setImage(UIImage(named: "lightbulb.max.fill"), for: .normal)
-            overrideUserInterfaceStyle = .light
+            customView.lampImage.tintColor = .systemYellow
+            customView.lampButton.setTitle("Turn off", for: .normal)
+            customView.lampImage.image = UIImage(systemName: "lightbulb.fill")
+            customView.backgroundColor = .white
         } else {
-            lamp.tintColor = .white
-            lamp.setImage(UIImage(named: "lightbulb.min"), for: .normal)
-            overrideUserInterfaceStyle = .dark
+            customView.lampImage.tintColor = .white
+            customView.lampButton.setTitle("Turn on", for: .normal)
+            customView.lampImage.image = UIImage(systemName: "lightbulb")
+            customView.backgroundColor = .black
         }
     }
 }
